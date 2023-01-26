@@ -1,4 +1,4 @@
-# Art -
+# Art - 15/15
 
 num_of_drops = int(input())
 drops = [tuple(map(int, input().split(","))) for _ in range(num_of_drops)]
