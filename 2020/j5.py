@@ -1,32 +1,42 @@
-# Escape Room - 11/15
+# Escape Room - 13/15
+# optimized from 11/15 to 13/15 via https://github.com/qiz-li/ccc-solutions/blob/main/2020/j5.py
 
-num_of_rows = int(input())
-num_of_cols = int(input())
-maze = tuple(tuple(map(int, input().split())) for _ in range(num_of_rows))
-visited = []
+import sys
 
+maze = []
+products = {}
+height, width = int(sys.stdin.readline()), int(sys.stdin.readline())
 
-def find_next_step(x, y):
+for y in range(height):
+    row = []
+    x = 0
+    for col in map(int, sys.stdin.readline().split()):
+        row.append(col)
+        product = (x+1) * (y+1)
+        if product in products:
+            products[product].append((x, y))
+        else:
+            products[product] = [(x, y)]
+        x += 1
 
-    if x == num_of_cols - 1 and y == num_of_rows - 1:
-        return True
+    maze.append(row)
 
-    visited.append((x + 1, y + 1))
+visited = set()
+queue = [(0, 0)]
 
-    value = maze[y][x]
+while queue:
+    cell = queue.pop(0)
+    value = maze[cell[1]][cell[0]]
 
-    factors = []
-    for i in range(1, value + 1):
-        if i > num_of_cols or (value // i) > num_of_rows:
-            continue
-        if value % i == 0:
-            factors.append((i, value // i))
-
-    for factor in [factor for factor in factors if factor not in visited]:
-        if find_next_step(factor[0] - 1, factor[1] - 1):
-            return True
-
-    return False
-
-
-print("yes") if find_next_step(0, 0) else print("no")
+    for product in products.get(value, []):
+        if product == (width-1, height-1):
+            print("yes")
+            break
+        if product not in visited:
+            visited.add(product)
+            queue.append(product)
+    else:
+        continue
+    break
+else:
+    print("no")
