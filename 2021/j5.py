@@ -1,4 +1,4 @@
-# Modern Art -
+# Modern Art - 15/15
 
 height, width = int(input()), int(input())
 num_of_instructions = int(input())
